@@ -14,7 +14,7 @@ Then, create a sample config file.
 
     remote --sample
 
-Edit this sample file. (Tip: you can also put this in config/remotes.yml)
+This generates a file called `remotes.yml`. Edit this sample file. (Tip: you can also put this in `config/remotes.yml` -- useful for Rails/Sinatra projects.)
 
     # remotes.yml
     live:
