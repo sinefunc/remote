@@ -16,14 +16,11 @@ module Remote
 
     # Returns the configuration hash.
     def config
-      begin
-        @config ||= YAML::load_file(config_file)
-      rescue ::Errno::ENOENT
-      end
+      verify_config
+      @config ||= YAML::load_file(config_file)
     end
 
     def servers
-      verify_config
       return @servers  unless @servers.nil?
       @servers = Hash.new
       config.each { |name, data| @servers[name] = Server.new(name, data) }
@@ -98,7 +95,7 @@ module Remote
 
   protected
     def verify_config
-      if config.nil?
+      if config_file.nil?
         log "Error: no config file is present."
         exit
       end

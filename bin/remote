@@ -11,7 +11,7 @@ if __FILE__ == $0
   elsif ARGV.first == "--list"
     app.list
 
-  elsif ARGV.empty?
+  elsif ARGV.empty? or ARGV == ['-h'] or ARGV == ['--help'] or ARGV == ['-?']
     cmd = File.basename($0)
     app.help(cmd)
 
