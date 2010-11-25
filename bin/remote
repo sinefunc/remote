@@ -5,35 +5,7 @@ require "#{prefix}/remote"
 
 if __FILE__ == $0
   if ARGV.first == '--sample'
-  data = "staging: &defaults
-  host: staging.myserver.com
-  # Everything below are optional.
-  user: rsc
-  path: /home/rsc/app/current
-  key: ~/.ssh/id_rsa.pub
-  commands:
-    # These are optional aliases.
-    # Typing 'remoter staging rake x' will execute this, with %s replaced by 'x'.
-    rake: 'bin/rake %s'
-
-    # Typing 'remoter staging deploy' will execute this script.
-    deploy: |
-      echo Deploying...
-      git pull
-      echo Done!
-
-# This is an example of how to define another server via inheritance.
-live:
-  <<: *defaults
-  path: /home/rsc/app
-  host: www.myserver.com"
-
-    begin
-      File.open(Remote::App.config_file, 'w') { |f| f.write(data) }
-      puts "Wrote #{Remote::App.config_file}."
-    rescue => e
-      puts "Error: unable to save to #{Remote::App.config_file}."
-    end
+    Remote::App.write_sample
     exit
   end
 
