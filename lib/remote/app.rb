@@ -58,17 +58,28 @@ module Remote
       fname = config_file_locations.last
       begin
         File.open(fname, 'w') { |f| f.write(sample_data) }
-        log "Wrote #{fname}."
+        log "Created the file #{fname}."
+        log "Edit this file with your list of servers, then type 'remote <yourserver>' to try it out."
       rescue => e
         log "Error: unable to save to #{fname}."
       end
     end
 
     def help(cmd)
-      log "Executes a command at a remote server."
-      log "Usage: #{cmd} <server> [<command>]"
-      log "       #{cmd} <server>,<server2>,<serverN> <command>"
-      log "       #{cmd} --sample"
+      log "Usage: #{cmd} <server>"
+      log "       Opens a console session in the given server."
+      log ""
+      log "Usage: #{cmd} <server> <command>"
+      log "       Executes the given command in the given server."
+      log ""
+      log "Usage: remote <svr1>,<svr2> <command>"
+      log "       Executes the given command in multiple servers."
+      log ""
+      log "Usage: remote --list"
+      log "       Lists available servers."
+      log ""
+      log "Configuration"
+      log "-------------"
       log ""
       log "Servers are defined in a config file. Use `#{cmd} --sample` to"
       log "create a sample config file."
@@ -86,10 +97,10 @@ module Remote
       log "--------"
       log ""
       log "1) Executes 'irb -r./init' in the server called 'live'."
-      log "    #{cmd} live irb -r./init"
+      log "   #{cmd} live irb -r./init"
       log ""
       log "2) Starts a console for the 'live' server."
-      log "    #{cmd} live"
+      log "   #{cmd} live"
       log ""
     end
 
