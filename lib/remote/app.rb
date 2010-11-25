@@ -4,25 +4,26 @@ module Remote
   class App
     include Printer
 
+    # Returns the config file location.
     def config_file
-      ENV['REMOTE_CONFIG_FILE'] || 'remotes.yml'
+      config_file_locations.detect { |f| File.exists? (f) }
     end
 
+    # Returns a list of where configuration files are expected to be present.
     def config_file_locations
-      ['config/remotes.yml', config_file]
+      ['config/remotes.yml', 'remotes.yml']
     end
 
+    # Returns the configuration hash.
     def config
-      config_file_locations.each do |f|
-        begin
-          @config ||= YAML::load_file(f)
-        rescue ::Errno::ENOENT
-        end
+      begin
+        @config ||= YAML::load_file(config_file)
+      rescue ::Errno::ENOENT
       end
-      @config
     end
 
     def servers
+      verify_config
       return @servers  unless @servers.nil?
       @servers = Hash.new
       config.each { |name, data| @servers[name] = Server.new(name, data) }
@@ -52,11 +53,17 @@ module Remote
     end
 
     def write_sample
+      unless config_file.nil?
+        log "A configuration file already exists in #{config_file}."
+        return
+      end
+
+      fname = config_file_locations.last
       begin
-        File.open(Remote::App.config_file, 'w') { |f| f.write(sample_data) }
-        log "Wrote #{Remote::App.config_file}."
+        File.open(fname, 'w') { |f| f.write(sample_data) }
+        log "Wrote #{fname}."
       rescue => e
-        log "Error: unable to save to #{Remote::App.config_file}."
+        log "Error: unable to save to #{fname}."
       end
     end
 
@@ -83,6 +90,7 @@ module Remote
     def verify_config
       if config.nil?
         log "Error: no config file is present."
+        exit
       end
     end
 
