@@ -20,19 +20,30 @@ module Remote
       cmd = [ "ssh", hostname ]
       cmd << "-i #{self.key}" unless self.key.nil?
 
-      remote_cmd = []
-      unless self.path.nil?
-        remote_cmd << "cd #{self.path}"
-      end
+      [ cmd.join(' '), translate(*what) ].compact.join(' -- ')
+    end
 
-      first_command = what.first.split(' ')
-      if self.commands.keys.include?(first_command.first)
-        remote_cmd << self.commands[first_command.shift].gsub("\n",';').gsub('%s', first_command.join(' '))
+    # Translates a given set of commands, taking into account aliases.
+    #
+    # translate('git pull', 'thor app:restart') #=> "cd ~/x; git pull; env RACK_ENV=production thor app:restart" 
+    def translate(*cmds)
+      return nil  if cmds.empty?
+
+      ret = []
+      ret << "cd #{self.path}"  unless self.path.nil?
+      cmds.each { |full_cmd| ret << translate_single(full_cmd) }
+      ret.flatten.compact.join(';').shellescape
+    end
+
+    # Translates a single command by resolving aliases.
+    def translate_single(full_cmd)
+      key, *args = full_cmd.split(' ')
+      command_alias = self.commands[key]
+      unless command_alias.nil?
+        command_alias.gsub("\n",';').gsub('%s', args.join(' '))
       else
-        remote_cmd += what
+        full_cmd
       end
-
-      cmd.join(' ') + ' -- ' + remote_cmd.join(';').shellescape
     end
   end
 end
