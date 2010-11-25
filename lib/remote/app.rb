@@ -2,6 +2,8 @@ require 'yaml'
 
 module Remote
   class App
+    include Printer
+
     def config_file
       ENV['REMOTE_CONFIG_FILE'] || 'remotes.yml'
     end
@@ -28,7 +30,7 @@ module Remote
     end
 
     def list
-      servers.keys.each { |name| puts "  #{name}" }
+      servers.keys.each { |name| log "  #{name}" }
     end
 
     def run(to, *cmd)
@@ -36,14 +38,15 @@ module Remote
       [to].flatten.each do |server_name|
         svr = servers[server_name]
         if svr.nil?
-          puts "Unknown server '#{server_name}'. Available servers are:"
+          log "Unknown server '#{server_name}'. Available servers are:"
           list
-          puts "See #{config_file} for more information."
+          log "See #{config_file} for more information."
           exit
         end
 
         command = svr.to_cmd(*cmd)
-        puts "#{svr.to_s}$ #{cmd.join(' ')}"
+        what = cmd.any? ? cmd.join(' ') : 'console'
+        status svr.to_s, what
         system command
       end
     end
@@ -51,35 +54,35 @@ module Remote
     def write_sample
       begin
         File.open(Remote::App.config_file, 'w') { |f| f.write(sample_data) }
-        puts "Wrote #{Remote::App.config_file}."
+        log "Wrote #{Remote::App.config_file}."
       rescue => e
-        puts "Error: unable to save to #{Remote::App.config_file}."
+        log "Error: unable to save to #{Remote::App.config_file}."
       end
     end
 
     def help
-      puts "Executes a command at a remote server."
-      puts "Usage: #{cmd} <server> [<command>]"
-      puts "       #{cmd} <server>,<server2>,<serverN> <command>"
-      puts "       #{cmd} --sample"
-      puts ""
-      puts "Servers are defined in #{app.config_file}. Use `#{cmd} --sample` to"
-      puts "create a sample config file."
-      puts ""
-      puts "Example:"
-      puts ""
-      puts "1) Executes 'irb -r./init' in the server called 'live'."
-      puts "    #{cmd} live irb -r./init"
-      puts ""
-      puts "2) Starts a console for the 'live' server."
-      puts "    #{cmd} live"
-      puts ""
+      log "Executes a command at a remote server."
+      log "Usage: #{cmd} <server> [<command>]"
+      log "       #{cmd} <server>,<server2>,<serverN> <command>"
+      log "       #{cmd} --sample"
+      log ""
+      log "Servers are defined in #{app.config_file}. Use `#{cmd} --sample` to"
+      log "create a sample config file."
+      log ""
+      log "Example:"
+      log ""
+      log "1) Executes 'irb -r./init' in the server called 'live'."
+      log "    #{cmd} live irb -r./init"
+      log ""
+      log "2) Starts a console for the 'live' server."
+      log "    #{cmd} live"
+      log ""
     end
 
   protected
     def verify_config
       if config.nil?
-        puts "Error: no config file is present."
+        log "Error: no config file is present."
       end
     end
 
