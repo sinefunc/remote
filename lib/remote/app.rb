@@ -57,6 +57,25 @@ module Remote
       end
     end
 
+    def help
+      puts "Executes a command at a remote server."
+      puts "Usage: #{cmd} <server> [<command>]"
+      puts "       #{cmd} <server>,<server2>,<serverN> <command>"
+      puts "       #{cmd} --sample"
+      puts ""
+      puts "Servers are defined in #{app.config_file}. Use `#{cmd} --sample` to"
+      puts "create a sample config file."
+      puts ""
+      puts "Example:"
+      puts ""
+      puts "1) Executes 'irb -r./init' in the server called 'live'."
+      puts "    #{cmd} live irb -r./init"
+      puts ""
+      puts "2) Starts a console for the 'live' server."
+      puts "    #{cmd} live"
+      puts ""
+    end
+
   protected
     def verify_config
       if config.nil?

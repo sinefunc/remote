@@ -7,34 +7,18 @@ app = Remote::App.new
 if __FILE__ == $0
   if ARGV.first == '--sample'
     app.write_sample
-    exit
-  end
 
-  if ARGV.first == "--list"
+  elsif ARGV.first == "--list"
     app.list
-    exit
-  end
 
-  if ARGV.size < 2
+  elsif ARGV.empty?
     cmd = File.basename($0)
-    puts "Executes a command at a remote server."
-    puts "Usage: #{cmd} <server> <command>"
-    puts "       #{cmd} <server>,<server2>,<serverN> <command>"
-    puts "       #{cmd} --sample"
-    puts ""
-    puts "Servers are defined in #{app.config_file}. Use `#{cmd} --sample` to"
-    puts "create a sample config file."
-    puts ""
-    puts "Example:"
-    puts ""
-    puts "    # Executes 'irb -r./init' in the server called 'live'."
-    puts "    #{cmd} live irb -r./init"
-    puts ""
-    exit
+    app.help(cmd)
+
+  else
+    servers = ARGV.shift.to_s.split(',')
+    command = ARGV
+
+    app.run servers, *command
   end
-
-  servers = ARGV.shift.to_s.split(',')
-  command = ARGV
-
-  app.run servers, *command
 end
