@@ -66,6 +66,13 @@ Using in Ruby
 
     require 'remote'
 
-    r = Remote::App.new :config => 'servers.yml'
-    r.run 'live', 'ls'
+    r = Remote::App.new
+    r = Remote::App.new(:config => 'servers.yml')  # Optional
 
+    r.run 'live', 'ls'    # Same as 'remote live ls'
+    r.servers             #=> [<Server 'development'>, <Server 'production'>, ...]
+    r.write_sample        # same as 'remote --sample'
+
+    r = Remote::App.new(:console => true)
+    r.list    # Same as 'remote --list'
+    r.help    # Same as 'remote --help'
