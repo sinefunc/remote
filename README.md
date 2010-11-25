@@ -27,7 +27,7 @@ This generates a file called `remotes.yml`. Edit this sample file. (Tip: you can
 Now, you may easily run commands on your given servers.
 
     remote live rake db:migrate
-    # Equivalent to running `ssh -i ~/.ssh/id_rsa app@foo.mysite.com -- rake db:migrate`
+    # Equivalent to running `ssh -i ~/.ssh/id_rsa app@foo.mysite.com -- cd /home/app/myapp && rake db:migrate`
 
 Going further
 -------------
