@@ -1,8 +1,7 @@
 require 'yaml'
 
 module Remote
-  module App
-    extend self
+  class App
     def config_file
       ENV['REMOTE_CONFIG_FILE'] || 'remotes.yml'
     end
