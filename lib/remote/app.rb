@@ -4,6 +4,12 @@ module Remote
   class App
     include Printer
 
+    def initialize(options={})
+      if options[:config_file]
+        @config_file = [options[:config_file]].flatten
+      end
+    end
+
     # Returns the config file location.
     def config_file
       config_file_locations.detect { |f| File.exists? (f) }
@@ -11,7 +17,7 @@ module Remote
 
     # Returns a list of where configuration files are expected to be present.
     def config_file_locations
-      ['config/remotes.yml', 'remotes.yml']
+      @config_file || ['config/remotes.yml', 'remotes.yml']
     end
 
     # Returns the configuration hash.
@@ -65,7 +71,7 @@ module Remote
       end
     end
 
-    def help(cmd)
+    def help(cmd='remote')
       log "Usage: #{cmd} <server>"
       log "       Opens a console session in the given server."
       log ""
