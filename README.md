@@ -22,6 +22,7 @@ This generates a file called `remotes.yml`. Edit this sample file. (Tip: you can
       user: app
       key: ~/.ssh/id_rsa
       path: /home/app/myapp
+      # (user, key and path are all optional.)
 
 Now, you may easily run commands on your given servers.
 
@@ -76,3 +77,14 @@ Using in Ruby
     r = Remote::App.new(:console => true)
     r.list    # Same as 'remote --list'
     r.help    # Same as 'remote --help'
+
+Authors
+-------
+
+Sinatra-minify is authored and maintained by Rico Sta. Cruz of Sinefunc, Inc.
+See more of our work on [www.sinefunc.com](http://www.sinefunc.com)!
+
+Copyright
+---------
+
+(c) 2010 Rico Sta. Cruz and Sinefunc, Inc. See the LICENSE file for more details.
