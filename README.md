@@ -55,7 +55,7 @@ You may also define aliases than take arguments.
     live:
       host: foo.mysite.com
       commands:
-        thor: env RACK_ENV=production rake %s
+        rake: env RACK_ENV=production rake %s
 
 So then you may:
 
