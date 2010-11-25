@@ -2,12 +2,12 @@ require 'yaml'
 
 module Remote
   class App
-    include Printer
-
     def initialize(options={})
-      if options[:config_file]
-        @config_file = [options[:config_file]].flatten
+      if options[:config]
+        @config_file = [options[:config]].flatten
       end
+
+      self.extend Printer  if options[:console]
     end
 
     # Returns the config file location.
@@ -111,6 +111,12 @@ module Remote
     end
 
   protected
+    def status(where, what)
+    end
+
+    def log(what)
+    end
+
     def verify_config
       if config_file.nil?
         log "Error: no config file is present."
