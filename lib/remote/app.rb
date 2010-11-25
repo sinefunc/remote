@@ -67,16 +67,26 @@ module Remote
       end
     end
 
-    def help
+    def help(cmd)
       log "Executes a command at a remote server."
       log "Usage: #{cmd} <server> [<command>]"
       log "       #{cmd} <server>,<server2>,<serverN> <command>"
       log "       #{cmd} --sample"
       log ""
-      log "Servers are defined in #{app.config_file}. Use `#{cmd} --sample` to"
+      log "Servers are defined in a config file. Use `#{cmd} --sample` to"
       log "create a sample config file."
       log ""
-      log "Example:"
+
+      if config_file.nil?
+        log "Config files are searched for in:"
+        log "  " + config_file_locations.join(", ")
+      else
+        log "Your configuration file is in #{config_file}."
+      end
+
+      log ""
+      log "Examples"
+      log "--------"
       log ""
       log "1) Executes 'irb -r./init' in the server called 'live'."
       log "    #{cmd} live irb -r./init"
