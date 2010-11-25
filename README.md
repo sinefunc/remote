@@ -93,7 +93,7 @@ You may then issue commands to multiple hosts like so:
 Using in Ruby
 -------------
 
-These will be for when creating Thor or Rake tasks:
+These will come in handy when creating Thor or Rake tasks:
 
     require 'remote'
 
@@ -111,7 +111,7 @@ These will be for when creating Thor or Rake tasks:
 Authors
 -------
 
-Sinatra-minify is authored and maintained by Rico Sta. Cruz of Sinefunc, Inc.
+Remote is authored and maintained by Rico Sta. Cruz of Sinefunc, Inc.
 See more of our work on [www.sinefunc.com](http://www.sinefunc.com)!
 
 Copyright
