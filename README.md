@@ -27,7 +27,7 @@ This generates a file called `remotes.yml`. Edit this sample file. (Tip: you can
 Now, you may easily run commands on your given servers.
 
     remote live rake db:migrate
-    # Equivalent of running `ssh -i ~/.ssh/id_rsa app@foo.mysite.com -- rake db:migrate`
+    # Equivalent to running `ssh -i ~/.ssh/id_rsa app@foo.mysite.com -- rake db:migrate`
 
 Going further
 -------------
@@ -62,8 +62,38 @@ So then you may:
     remote live rake app:version 
     # Executes 'env RACK_ENV=production rake app:version' on the remote server
      
+Multiple servers
+----------------
+
+Since the config file is in YAML, defining multiple servers can take
+advantage of YAML's built-in inheritance solution.
+
+    # remotes.yml
+    live1: &defaults
+      host: www.mysite.com
+      user: myapp
+      commands:
+        deploy: #some semi-complicated stuff here
+        #...
+
+    live2:
+      <<: *defaults
+      host: www2.mysite.com
+
+    live3:
+      <<: *defaults
+      host: www3.mysite.com
+
+    # and so on
+
+You may then issue commands to multiple hosts like so:
+
+    remote live1,live2,live3 deploy
+
 Using in Ruby
 -------------
+
+These will be for when creating Thor or Rake tasks:
 
     require 'remote'
 
