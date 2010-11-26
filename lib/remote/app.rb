@@ -37,7 +37,7 @@ module Remote
       servers.keys.each { |name| log "  #{name}" }
     end
 
-    def run(to, *cmd)
+    def run(to, *cmds)
       verify_config
       [to].flatten.each do |server_name|
         svr = servers[server_name]
@@ -48,9 +48,11 @@ module Remote
           exit
         end
 
-        command = svr.to_cmd(*cmd)
-        what = cmd.any? ? cmd.join(' ') : 'console'
+        what = cmds.join(' ')
+        what = "(console)"  if what.empty?
         status svr.to_s, what
+
+        command = svr.to_cmd(*cmds)
         system command
       end
     end
