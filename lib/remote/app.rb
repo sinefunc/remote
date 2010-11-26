@@ -3,6 +3,7 @@ require 'yaml'
 module Remote
   class App
     def initialize(options={})
+      @command = options[:command] || 'remote'
       if options[:config]
         @config_file = [options[:config]].flatten
       end
@@ -73,7 +74,8 @@ module Remote
       end
     end
 
-    def help(cmd='remote')
+    def help
+      cmd = @command
       log "Usage: #{cmd} <server>"
       log "       Opens a console session in the given server."
       log ""
@@ -121,7 +123,11 @@ module Remote
 
     def verify_config
       if config_file.nil?
-        log "Error: no config file is present."
+        log "Error: you have no config file yet."
+        log "Config files are searched for in:"
+        log "  " + config_file_locations.join(", ")
+        log ""
+        log "Use '#{@command} --sample' to create a sample config file."
         exit
       end
     end

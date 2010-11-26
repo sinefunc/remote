@@ -3,7 +3,7 @@
 prefix = File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 require "#{prefix}/remote"
 
-app = Remote::App.new :console => true
+app = Remote::App.new :console => true, :command => File.basename($0)
 
 if __FILE__ == $0
   if ARGV.first == '--sample'
@@ -13,8 +13,7 @@ if __FILE__ == $0
     app.list
 
   elsif ARGV.empty? or ARGV == ['-h'] or ARGV == ['--help'] or ARGV == ['-?']
-    cmd = File.basename($0)
-    app.help(cmd)
+    app.help
 
   else
     servers = ARGV.shift.to_s.split(',')
