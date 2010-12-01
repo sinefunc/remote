@@ -19,6 +19,6 @@ if __FILE__ == $0
     servers = ARGV.shift.to_s.split(',')
     command = ARGV.join(' ')
 
-    app.run servers, *command
+    app.run servers, command
   end
 end

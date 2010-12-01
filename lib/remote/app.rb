@@ -13,7 +13,7 @@ module Remote
 
     # Returns the config file location.
     def config_file
-      config_file_locations.detect { |f| File.exists? (f) }
+      config_file_locations.detect { |f| File.exists?(f) }
     end
 
     # Returns a list of where configuration files are expected to be present.
@@ -53,6 +53,7 @@ module Remote
         what = "(console)"  if what.empty?
         status svr.to_s, what
 
+        cmds = []  if cmds == [""]
         command = svr.to_cmd(*cmds)
         system command
       end
